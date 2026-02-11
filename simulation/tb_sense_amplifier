@@ -1,0 +1,45 @@
+`timescale 1ns/1ps
+
+module tb_saff;
+
+reg clk;
+reg rst;
+reg d;
+wire q;
+wire qb;
+
+// Instantiate DUT
+saff uut (
+    .clk(clk),
+    .rst(rst),
+    .d(d),
+    .q(q),
+    .qb(qb)
+);
+
+// Clock generation (10ns period)
+always #5 clk = ~clk;
+
+initial begin
+    // Dump waveform
+    $dumpfile("saff.vcd");
+    $dumpvars(0, tb_saff);
+
+    // Initialize
+    clk = 0;
+    rst = 1;
+    d   = 0;
+
+    #10 rst = 0;
+
+    // Apply inputs
+    #10 d = 1;
+    #10 d = 0;
+    #10 d = 1;
+    #10 d = 1;
+    #10 d = 0;
+
+    #40 $finish;
+end
+
+endmodule
